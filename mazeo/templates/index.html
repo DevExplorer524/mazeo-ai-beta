@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mazeo AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Space+Grotesk:wght@300;500;700&display=swap"
+        rel="stylesheet">
+    <!-- Ionicons -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">M</div>
+                <h1>Mazeo <span class="beta-tag">BETA</span></h1>
+            </div>
+            <nav class="nav-menu">
+                <button class="nav-btn active" data-mode="chat">
+                    <ion-icon name="chatbubbles-outline"></ion-icon> Chat
+                </button>
+                <button class="nav-btn" data-mode="search">
+                    <ion-icon name="search-outline"></ion-icon> Search
+                </button>
+                <button class="nav-btn" data-mode="image">
+                    <ion-icon name="images-outline"></ion-icon> Create
+                </button>
+            </nav>
+            <div class="status-indicator">
+                <span class="dot"></span> Online
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="top-bar">
+                <h2 id="section-title">AI Chat</h2>
+                <div class="user-profile">
+                    <div class="avatar">U</div>
+                </div>
+            </header>
+
+            <!-- Chat Area -->
+            <div id="chat-container" class="content-area active">
+                <div class="messages-wrapper" id="messages">
+                    <div class="message system">
+                        <div class="avatar">M</div>
+                        <div class="bubble">
+                            Hello! I am Mazeo. I can search the web, generate images, and recall our conversation. How
+                            can I help you?
+                        </div>
+                    </div>
+                    <div class="suggestion-chips">
+                        <button class="chip" onclick="usePrompt('Generate a cyberpunk city')">🎨 Create Image</button>
+                        <button class="chip" onclick="usePrompt('Search for latest tech news')">🔍 Web Search</button>
+                        <button class="chip" onclick="usePrompt('Tell me a funny joke')">😄 Tell a Joke</button>
+                    </div>
+                </div>
+
+                <div class="input-area">
+                    <div class="processing-indicator" id="processing-indicator">
+                        <span class="thinking-text">Thinking...</span>
+                        <div class="loader"></div>
+                    </div>
+                    <form id="chat-form">
+                        <input type="text" id="user-input" placeholder="Type a message..." autocomplete="off">
+                        <button type="submit" class="send-btn">
+                            <ion-icon name="send"></ion-icon>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Search Area (Hidden by default) -->
+            <div id="search-container" class="content-area">
+                <div class="search-hero">
+                    <h1>What do you want to find?</h1>
+                    <form id="search-form">
+                        <div class="search-bar">
+                            <ion-icon name="search"></ion-icon>
+                            <input type="text" id="search-input" placeholder="Search the web...">
+                            <button type="submit">Search</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="search-results" id="search-results">
+                    <!-- Results will appear here -->
+                </div>
+            </div>
+
+            <!-- Image Area (Hidden by default) -->
+            <div id="image-container" class="content-area">
+                <div class="image-hero">
+                    <h1>Imagine Anything</h1>
+                    <p>Describe what you want to see, and Mazeo will create it.</p>
+                    <form id="image-form">
+                        <div class="search-bar">
+                            <ion-icon name="color-wand"></ion-icon>
+                            <input type="text" id="image-prompt" placeholder="A futuristic city in the clouds...">
+                            <select id="image-style" class="style-select">
+                                <option value="Realistic">Realistic</option>
+                                <option value="Cartoon">Cartoon</option>
+                                <option value="Cyberpunk">Cyberpunk</option>
+                                <option value="3D Render">3D Render</option>
+                                <option value="Oil Painting">Oil Painting</option>
+                                <option value="Sketch">Sketch</option>
+                            </select>
+                            <button type="submit">Generate</button>
+                        </div>
+                    </form>
+                    <div class="quick-presets">
+                        <button class="preset-btn" onclick="quickImage('Cute golden retriever puppy', 'Realistic')">🐶
+                            Puppy</button>
+                        <button class="preset-btn" onclick="quickImage('Cyberpunk neon cat in Tokyo', 'Cyberpunk')">🐱
+                            Cyber Cat</button>
+                        <button class="preset-btn"
+                            onclick="quickImage('Ancient Egyptian pyramids at night with galaxy sky', 'Oil Painting')">🌌
+                            Galaxy Pyramids</button>
+                        <button class="preset-btn" onclick="quickImage('Superhero flying over New York', 'Cartoon')">🦸
+                            Superhero</button>
+                    </div>
+                </div>
+                <div class="image-gallery" id="image-gallery">
+                    <div class="empty-state">
+                        <ion-icon name="image-outline"></ion-icon>
+                        <p>Your generated masterpieces will appear here.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="app-footer">
+                <p>Run locally on Mazeo AI System v1.5 [BETA] • Designed for Performance & Aesthetics</p>
+                <div class="footer-links">
+                    <span>Privacy</span>
+                    <span>Terms</span>
+                    <span>Settings</span>
+                </div>
+            </footer>
+
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>
